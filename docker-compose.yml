@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+
+  eureka-server:
+    build:
+      context: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - shopeasy-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    networks:
+      - shopeasy-network
+
+  user-service:
+    build:
+      context: ./user-service
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+    networks:
+      - shopeasy-network
+
+  product-service:
+    build:
+      context: ./product-service
+    container_name: product-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+    networks:
+      - shopeasy-network
+
+  order-service:
+    build:
+      context: ./order-service
+    container_name: order-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+    networks:
+      - shopeasy-network
+
+networks:
+  shopeasy-network:
+    driver: bridge
